@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Kakeibo.Models.Home>
+@{
+    ViewData["Title"] = "家計簿アプリ";
+    DateTime now = new DateTime();
+    now = DateTime.Now;
+    string year = now.ToString("yyyy") + "年";
+    string month = now.ToString("MM") + "月";
+}
+<h1>@year @month の収支合計</h1>
+<h3>
+    @if(ViewBag.Sum < 0)
+    {
+        <span>収支：@(ViewBag.Sum) 円</span>
+    }
+    else
+    {
+        <span>収支：+@(ViewBag.Sum) 円</span>
+    }
+ </h3>
+<h3>収入合計：@ViewBag.SumInc 円</h3>
+<h3>支出合計：@ViewBag.SumExp 円</h3>
+<br />
+<h1>カテゴリ別収支</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) 
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount) 円
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+　
+

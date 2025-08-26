@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Kakeibo.Models.Transaction>
+
+@{
+    ViewData["Title"] = "登録内容編集";
+}
+
+<h1>登録内容編集</h1>
+
+@if(ViewBag.Prev != null)
+{
+    <a asp-action="Index" asp-route-page="@ViewBag.Prev">前へ</a>
+}
+else
+{
+    <span>前へ</span>
+}
+/
+@if(ViewBag.Next != null)
+{
+    <a asp-action="Index" asp-route-page="@ViewBag.Next">次へ</a>
+}
+else
+{
+    <span>次へ</span>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" asp-route-isExp="@item.Category.IsExpense">編集</a> |
+                <a id="delete_button" asp-action="Delete" asp-route-id="@item.Id">削除</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<script>
+    #delete_button.onclick = function(){
+        return confirm("本当に削除しますか？");
+    }
+</script>
