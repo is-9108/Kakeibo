@@ -6,9 +6,24 @@
 
 <h1>登録内容編集</h1>
 
+<select name="filter" form="fil">
+    <option>すべて</option>
+    @foreach(var item in ViewBag.Categories)
+    {
+        <option>@item.Text</option>
+    }
+</select>
+<form method="get" asp-action="Index" asp-route-page="" asp-route-filter="@ViewBag.Filter" id="fil">
+    <input type="submit" value="絞り込み" />
+    </form>
+
+    <br />
+
+    
+
 @if(ViewBag.Prev != null)
 {
-    <a asp-action="Index" asp-route-page="@ViewBag.Prev">前へ</a>
+    <a asp-action="Index" asp-route-page="@ViewBag.Prev" asp-route-filter="@ViewBag.Filter">前へ</a>
 }
 else
 {
@@ -17,7 +32,7 @@ else
 /
 @if(ViewBag.Next != null)
 {
-    <a asp-action="Index" asp-route-page="@ViewBag.Next">次へ</a>
+    <a asp-action="Index" asp-route-page="@ViewBag.Next" asp-route-filter="@ViewBag.Filter">次へ</a>
 }
 else
 {

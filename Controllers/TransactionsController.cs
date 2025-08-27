@@ -19,16 +19,23 @@ namespace Kakeibo.Controllers
         }
 
         // GET: Transactions
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(int? page, string filter)
         {
+            if(filter == "すべて")
+                filter = null;
+
+            var categorys = from m in _context.Categorys select m;
             if (page == null)
                 page = 0;
             int max = 6;
 
             var transactions = from m in _context.Transactions select m;
             transactions = transactions.Skip((int)page * max).Take(max).Include(t => t.Category);
-            var test = _context.Transactions.Skip(max * ((int)page + 1)).Take(max);
-
+            if(!string.IsNullOrEmpty(filter))
+            {
+                transactions = transactions.Where(t => t.Category.Name.Contains(filter));
+                ViewData["filter"] = filter;
+            }
             if (page > 0)
                 ViewData["Prev"] = (int)page - 1;
             if (transactions.Count() >= max)
@@ -37,9 +44,8 @@ namespace Kakeibo.Controllers
                 if(_context.Transactions.Skip(max * ((int)page + 1)).Take(max).Count() == 0)
                     ViewData["Next"] = null;
             }
-
-
-                return View(await transactions.ToListAsync());
+            ViewData["Categories"] = new SelectList(categorys, "Id", "Name");
+            return View(await transactions.ToListAsync());
         }
 
 
