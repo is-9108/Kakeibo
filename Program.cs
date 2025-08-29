@@ -1,6 +1,8 @@
+using Kakeibo.Areas.Identity.Data;
 using Kakeibo.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +13,11 @@ builder.Services.AddDbContext<KakeiboContext>(
     options => options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"))
 );
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<KakeiboUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<KakeiboContext>();
+
+
+
 
 var app = builder.Build();
 

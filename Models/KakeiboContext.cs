@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Kakeibo.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Kakeibo.Models;
 
-public partial class KakeiboContext : DbContext
+public partial class KakeiboContext : IdentityDbContext<KakeiboUser>
 {
     public KakeiboContext()
     {
@@ -13,6 +13,11 @@ public partial class KakeiboContext : DbContext
     public KakeiboContext(DbContextOptions<KakeiboContext> options)
         : base(options)
     {
+    }
+
+    public static KakeiboContext Create()
+    {
+        return new KakeiboContext();
     }
 
     public virtual DbSet<Category> Categorys { get; set; }
@@ -25,6 +30,10 @@ public partial class KakeiboContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // まずIdentityの定義を適用
+        base.OnModelCreating(modelBuilder);
+
+        // 業務用テーブルの定義はこの後に記述
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Category");
