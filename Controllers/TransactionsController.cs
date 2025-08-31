@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Kakeibo.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Kakeibo.Controllers
 {
@@ -172,6 +173,22 @@ namespace Kakeibo.Controllers
         private bool TransactionExists(int id)
         {
             return _context.Transactions.Any(e => e.Id == id);
+        }
+
+        public IActionResult Admin()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return RedirectToPage("/Account/Login", new { area = "Identity" });
+
+            return View();
+        }
+
+        public async Task<IActionResult> DeleteAll()
+        {
+            var transactions = from m in _context.Transactions select m;
+            _context.Transactions.RemoveRange(transactions);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index","Home");
         }
     }
 }

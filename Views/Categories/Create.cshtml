@@ -18,7 +18,10 @@
             </div>
             <div class="form-group">
                 <label asp-for="IsExpense" class="control-label"></label>
-                <input asp-for="IsExpense" class="form-check-input" />
+                <select asp-for="IsExpense" class ="form-control">
+                    <option value="true">支出</option>
+                    <option value="false">収入</option>
+                </select>
                 <span asp-validation-for="IsExpense" class="text-danger"></span>
             </div>
             <div class="form-group">
