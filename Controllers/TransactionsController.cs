@@ -186,6 +186,14 @@ namespace Kakeibo.Controllers
         public async Task<IActionResult> DeleteAll()
         {
             var transactions = from m in _context.Transactions select m;
+            var categorys = from m in _context.Categorys select m;
+            Monthly_report monthly_Report = new Monthly_report();
+            monthly_Report.Year = DateTime.Now.Year;
+            monthly_Report.Month = DateTime.Now.Month;
+            monthly_Report.TotalIncome = transactions.Where(t => t.Category.IsExpense == false).Sum(t => t.Amount);
+            monthly_Report.TotalExpense = transactions.Where(t => t.Category.IsExpense == true).Sum(t => t.Amount);
+            monthly_Report.Balance = monthly_Report.TotalIncome - monthly_Report.TotalExpense;
+            _context.Monthly_Reports.Add(monthly_Report);
             _context.Transactions.RemoveRange(transactions);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index","Home");

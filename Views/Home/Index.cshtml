@@ -1,10 +1,11 @@
-﻿@model IEnumerable<Kakeibo.Models.Home>
+﻿@model Kakeibo.Models.HomeView
 @{
     ViewData["Title"] = "家計簿アプリ";
     DateTime now = new DateTime();
     now = DateTime.Now;
     string year = now.ToString("yyyy") + "年";
     string month = now.ToString("MM") + "月";
+
 }
 <h1>@year @month の収支合計</h1>
 <h3>
@@ -25,15 +26,15 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Homes.First().Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Amount)
+                @Html.DisplayNameFor(model => model.Homes.First().Amount)
             </th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model) 
+        @foreach (var item in Model.Homes) 
         {
             <tr>
                 <td>
@@ -41,6 +42,45 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Amount) 円
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<h1>1年間の月ごとの収支</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                期間
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Monthly_Reports.First().TotalIncome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Monthly_Reports.First().TotalExpense)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Monthly_Reports.First().Balance)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Monthly_Reports) 
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year) 年 @Html.DisplayFor(modelItem => item.Month) 月
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalIncome) 円
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalExpense) 円
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Balance) 円
                 </td>
             </tr>
         }

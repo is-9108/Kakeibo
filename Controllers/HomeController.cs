@@ -19,6 +19,7 @@ namespace Kakeibo.Controllers
         public IActionResult Index()
         {
             var homes = new List<Home>();
+            var monthly_Reports = new List<Monthly_report>();
             int sumInc = 0;
             int sumExp = 0;
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection")))
@@ -29,7 +30,9 @@ namespace Kakeibo.Controllers
                     "FROM Transactions " +
                     "INNER JOIN Categorys on Transactions.CategoryId = Categorys.Id " +
                     "group by Categorys.Name,Categorys.isExpense", connection);
-                
+
+                var command2 = new SqlCommand("SELECT * FROM Monthly_report", connection);
+
                 using (var reader = command.ExecuteReader())
                 {
                     
@@ -48,11 +51,32 @@ namespace Kakeibo.Controllers
                         homes.Add(home);
                     }
                 }
+                using (var reader = command2.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var monthly_Report = new Monthly_report()
+                        {
+                            Year = reader.GetInt32(0),
+                            Month = reader.GetInt32(1),
+                            TotalIncome = reader.GetInt32(2),
+                            TotalExpense = reader.GetInt32(3),
+                            Balance = reader.GetInt32(4)
+                        };
+                        monthly_Reports.Add(monthly_Report);
+                    }
+                }
             }
             ViewData["sumInc"] = sumInc;
             ViewData["sumExp"] = sumExp;
             ViewData["sum"] = sumInc - sumExp;
-            return View(homes);
+            var homeView = new HomeView()
+            {
+                Homes = homes,
+                Monthly_Reports = monthly_Reports
+            };
+
+            return View(homeView);
         }
 
 

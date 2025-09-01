@@ -24,6 +24,8 @@ public partial class KakeiboContext : IdentityDbContext<KakeiboUser>
 
     public virtual DbSet<Transaction> Transactions { get; set; }
 
+    public virtual DbSet<Monthly_report> Monthly_Reports { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Name=DefaultConnection");
@@ -54,6 +56,11 @@ public partial class KakeiboContext : IdentityDbContext<KakeiboUser>
                 .HasForeignKey(d => d.CategoryId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Transactions_Categorys");
+        });
+        modelBuilder.Entity<Monthly_report>(entity =>
+        {
+            entity.HasKey(e => e.Year).HasName("PK_Monthly_Report");
+            entity.HasKey(e => e.Month).HasName("PK_Monthly_Report");
         });
 
         OnModelCreatingPartial(modelBuilder);
