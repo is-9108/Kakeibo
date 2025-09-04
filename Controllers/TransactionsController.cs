@@ -58,7 +58,6 @@ namespace Kakeibo.Controllers
             var Transaction = new Transaction
             {
                 Date = dateTime
-                //IsExpense = isExpenseCheck
             };
             ViewData["IsExpense"] = isExp;
             ViewData["CategoryId"] = new SelectList(_context.Categorys.Where(c => c.IsExpense == isExp), "Id", "Name");
@@ -66,8 +65,6 @@ namespace Kakeibo.Controllers
         }
 
         // POST: Transactions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CategoryId,Title,Amount,Date,IsExpense")] Transaction transaction)
@@ -76,11 +73,9 @@ namespace Kakeibo.Controllers
             {
                 _context.Add(transaction);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
-
-            ViewData["CategoryId"] = new SelectList(_context.Categorys, "Id", "Name", transaction.CategoryId);
-            return View(transaction);
+            
+            return Create(true);
         }
 
         // GET: Transactions/Edit/5
@@ -100,9 +95,6 @@ namespace Kakeibo.Controllers
             return View(transaction);
         }
 
-        // POST: Transactions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,CategoryId,Title,Amount,Date,IsExpense")] Transaction transaction)

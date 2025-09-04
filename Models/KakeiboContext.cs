@@ -32,10 +32,8 @@ public partial class KakeiboContext : IdentityDbContext<KakeiboUser>
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // まずIdentityの定義を適用
         base.OnModelCreating(modelBuilder);
 
-        // 業務用テーブルの定義はこの後に記述
         modelBuilder.Entity<Category>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK_Category");

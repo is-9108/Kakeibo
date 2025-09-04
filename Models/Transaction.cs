@@ -23,6 +23,5 @@ public partial class Transaction
     [Display(Name = "登録日")]
     public DateTime Date { get; set; }
 
-
     public virtual Category? Category { get; set; }
 }
